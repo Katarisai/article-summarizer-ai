@@ -1,160 +1,162 @@
 # Article Summarizer AI
 
-Article Summarizer AI is a full-stack MERN application with a modern Tailwind CSS UI that can summarize, rewrite, convert to bullet points, and create multi-language summaries. It stores history in MongoDB and supports delete, copy, download, and dark mode.
+Article Summarizer AI is a full-stack React + Express + MongoDB application that summarizes text, URLs, images, audio, video, and documents. It includes OpenAI Vision analysis, OCR fallback for images, AI chat follow-ups, history storage, and live history sync.
 
 ## Features
 
-- AI summarization
-- AI rewrite
-- Bullet summary
-- Multi-language summary
-- MongoDB history storage
-- Auto-load history on page load
-- Delete history items
-- Copy summary
-- Download summary
-- Loading UI state
-- Clear input button
-- Character counter
-- Dark mode
-- Responsive Tailwind layout
-- Error handling
+- Multi-source summarization:
+  - Plain text
+  - Web URLs
+  - Images (Vision + OCR fallback)
+  - Audio files
+  - Video files
+  - Documents (PDF, DOCX, TXT, image documents)
+- Summary modes:
+  - Summary
+  - Rewrite
+  - Bullet points
+- Multi-language output
+- AI chat Q&A based on generated summary/context
+- Key points and markdown summary export
+- Mind map rendering from summary key points
+- Upload progress UI for media/document uploads
+- OCR preprocessing pipeline for difficult images (grayscale, normalize, threshold)
+- Vision failure transparency (fallback mode and visible Vision error details)
+- MongoDB-backed history with delete support
+- Live history updates via server-sent events (SSE)
+- Responsive Tailwind CSS interface
 
 ## Tech Stack
 
-- React.js
-- Tailwind CSS
-- Node.js
-- Express.js
-- MongoDB
-- OpenAI API
+- Frontend: React, Tailwind CSS, Axios
+- Backend: Node.js, Express, Multer
+- Database: MongoDB (Mongoose)
+- AI/OCR: OpenAI API, Tesseract.js, Sharp
+- Parsing/Extraction: Cheerio, Mammoth, pdf-parse
+- Visualization: Mermaid
+
+## Project Structure
+
+- Root app launcher: `server.js` (loads `server/server.js`)
+- Backend app: `server/`
+- Frontend app: `client/`
 
 ## Installation
 
-### 1. Clone the repository
+1. Clone repository
 
 ```bash
-git clone https://github.com/your-username/article-summarizer-ai.git
+git clone https://github.com/Katarisai/article-summarizer-ai.git
 cd article-summarizer-ai
 ```
 
-### 2. Install backend dependencies
+2. Install dependencies
 
 ```bash
-cd server
-npm install
+npm run install-all
 ```
 
-### 3. Install frontend dependencies
+## Environment Variables
 
-```bash
-cd ../client
-npm install
-```
-
-### 4. Configure environment variables
-
-Create a `.env` file in the project root:
+Create a `.env` file in the project root (same level as `server.js`):
 
 ```env
-MONGO_URI=your_mongodb_url
-OPENAI_API_KEY=your_openai_api_key
-# Optional: override ffmpeg binaries for large media preprocessing
+MONGO_URI=your_mongodb_connection_string
+OPENAI_API_KEY=sk-your_openai_key
+PORT=5000
+
+# Optional ffmpeg/ffprobe overrides (needed for large media preprocessing)
 FFMPEG_PATH=ffmpeg
 FFPROBE_PATH=ffprobe
 ```
 
-Use `.env.example` as a template.
+Notes:
 
-### 5. Install ffmpeg (recommended for large media)
+- Keep `.env` private.
+- If ffmpeg is not in your PATH, set `FFMPEG_PATH` and `FFPROBE_PATH` explicitly.
 
-Audio/video files above 25MB are automatically preprocessed and chunked for transcription.
+## Run Locally
 
-- Windows (winget): `winget install Gyan.FFmpeg`
-- macOS (brew): `brew install ffmpeg`
-- Ubuntu/Debian: `sudo apt install ffmpeg`
+Run backend and frontend in separate terminals.
 
-If `ffmpeg` is not in PATH, set `FFMPEG_PATH` and `FFPROBE_PATH` in `.env`.
-
-## Run the Project
-
-### Backend
+Terminal 1 (backend):
 
 ```bash
-cd server
-npm run dev
+npm run dev:server
 ```
 
-### Frontend
+Terminal 2 (frontend):
 
 ```bash
-cd client
-npm start
+npm run dev:client
 ```
+
+Frontend: http://localhost:3000
+Backend: http://localhost:5000
 
 ## API Endpoints
 
-### Summarize, rewrite, bulletize, or translate summary
+Base route is mounted at both `/api` and `/api/summarize` for compatibility.
 
-`POST /api/summarize`
+### Summarization
 
-Request body:
+- `POST /api/summarize-text`
+- `POST /api/summarize-url`
+- `POST /api/summarize-image` (multipart field: `image`)
+- `POST /api/summarize-video` (multipart field: `video`)
+- `POST /api/summarize-audio` (multipart field: `audio`)
+- `POST /api/summarize-document` (multipart field: `document`)
 
-```json
-{
-  "text": "Your article text here",
-  "mode": "summary",
-  "language": "Spanish"
-}
-```
+Compatibility aliases:
 
-Supported modes:
+- `POST /api/summarize/image`
+- `POST /api/summarize` (maps to text summarize)
+- `POST /api/` (maps to text summarize)
 
-- `summary`
-- `rewrite`
-- `bullet`
-- `language`
+### Chat
 
-### Get history
+- `POST /api/chat`
 
-`GET /api/summarize/history`
+### History
 
-### Delete history item
+- `GET /api/history`
+- `DELETE /api/history/:id`
+- Legacy delete alias: `DELETE /api/:id`
 
-`DELETE /api/summarize/:id`
+### Live updates
 
-## Submission Checklist
+- `GET /api/events` (SSE stream for summary/history changes)
 
-- [x] AI summarization
-- [x] MongoDB storage
-- [x] History
-- [x] Delete history
-- [x] Copy summary
-- [x] Download summary
-- [x] Dark mode
-- [x] Loading UI
-- [x] Error handling
-- [x] Responsive UI
-- [x] Tailwind CSS setup
-- [x] `.env.example`
+## Upload Limits
 
-## GitHub Push Commands
+- Image: 20MB
+- Document: 100MB
+- Audio: 512MB
+- Video: 1GB
 
-```bash
-git init
-git add .
-git commit -m "Article Summarizer AI"
-git branch -M main
-git remote add origin <your_repo_url>
-git push -u origin main
-```
+For audio/video transcription, large files are automatically preprocessed and chunked when ffmpeg is available.
 
-## Screenshots
+## Troubleshooting
 
-Add application screenshots here before submission.
+- Vision errors:
+  - The app now returns and displays `visionError` details when Vision fails and OCR fallback is used.
+- OCR low-confidence text:
+  - Very short/low-confidence OCR fragments are hidden from UI and replaced with a low-confidence analysis summary.
+- OpenAI key issues:
+  - Ensure `OPENAI_API_KEY` is valid and has active billing/quota.
+- Mongo connection issues:
+  - Verify `MONGO_URI` and database network access.
 
-## Notes
+## Scripts
 
-- Keep your real `.env` file private.
-- Add screenshots before final submission.
-- Large audio/video support depends on ffmpeg availability on the server.
+From project root:
+
+- `npm run install-all` - install root, backend, and frontend dependencies
+- `npm run dev` - start backend dev server
+- `npm run dev:server` - start backend dev server
+- `npm run dev:client` - start frontend dev server
+- `npm start` - start backend in production mode
+
+## License
+
+MIT
