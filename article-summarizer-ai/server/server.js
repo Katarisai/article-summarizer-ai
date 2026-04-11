@@ -48,6 +48,10 @@ app.get("/api/events", (req, res) => {
   });
 });
 
+app.get("/", (req, res) => {
+  res.send("Article Summarizer API is running 🚀");
+});
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
