@@ -5,9 +5,8 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-app.use(express.static(path.join(__dirname)));
+app.use(express.static(__dirname));
 
-// Express 5-safe catch-all route for SPA fallback
 app.get(/.*/, (_req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
