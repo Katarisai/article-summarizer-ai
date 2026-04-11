@@ -154,6 +154,19 @@
       transition: all 0.3s ease;
     }
 
+    #urlInput {
+      display: block;
+    }
+
+    #fileInput,
+    #textInput {
+      display: none;
+    }
+
+    #textInput {
+      min-height: 200px;
+    }
+
     input[type="text"]:focus,
     input[type="url"]:focus,
     textarea:focus {
@@ -383,6 +396,131 @@
       display: block;
     }
 
+    .stage-badges {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .badge {
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 0.78em;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.04);
+      color: #b0b0b0;
+    }
+
+    .badge.pending {
+      border-color: rgba(255, 255, 255, 0.25);
+      color: #b0b0b0;
+    }
+
+    .badge.inprogress {
+      border-color: #59b9ff;
+      color: #9bd8ff;
+      background: rgba(89, 185, 255, 0.15);
+    }
+
+    .badge.success {
+      border-color: #00ffc8;
+      color: #00ffc8;
+      background: rgba(0, 255, 200, 0.12);
+    }
+
+    .badge.error {
+      border-color: #ff6464;
+      color: #ff9999;
+      background: rgba(255, 100, 100, 0.14);
+    }
+
+    .export-section {
+      display: none;
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(0, 255, 200, 0.16);
+    }
+
+    .export-section.show {
+      display: block;
+    }
+
+    .export-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .export-btn {
+      background: rgba(0, 255, 200, 0.12);
+      color: #bfffee;
+      border: 1px solid rgba(0, 255, 200, 0.35);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 0.8em;
+      cursor: pointer;
+    }
+
+    .share-link {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(0, 255, 200, 0.25);
+      background: rgba(0, 0, 0, 0.35);
+      color: #c7fff2;
+      font-size: 0.8em;
+    }
+
+    .analytics {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(0, 255, 200, 0.1);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    .analytics h3 {
+      color: #d3fff5;
+      margin-bottom: 12px;
+      font-size: 1em;
+    }
+
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .analytics-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 0.8em;
+    }
+
+    .analytics-label {
+      color: #8ca3b0;
+      margin-bottom: 4px;
+    }
+
+    .analytics-value {
+      color: #d8fff7;
+      font-weight: 600;
+    }
+
+    .analytics-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 8px;
+      font-size: 0.78em;
+      color: #b6c5cc;
+    }
+
     @media (max-width: 768px) {
       .header h1 {
         font-size: 1.55em;
@@ -408,6 +546,10 @@
         flex-direction: column;
         align-items: stretch;
       }
+
+      .stage-badges {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -427,13 +569,13 @@
 
     <!-- Input Mode Tabs -->
     <div class="tabs">
-      <button class="tab active" onclick="switchTab('url')">🌐 Webpage</button>
-      <button class="tab" onclick="switchTab('youtube')">▶ YouTube</button>
-      <button class="tab" onclick="switchTab('video')">🎬 Video</button>
-      <button class="tab" onclick="switchTab('audio')">🎵 Audio</button>
-      <button class="tab" onclick="switchTab('image')">🖼 Image</button>
-      <button class="tab" onclick="switchTab('pdf')">📄 PDF, Image & More Files</button>
-      <button class="tab" onclick="switchTab('text')">📝 Long Text</button>
+      <button class="tab active" onclick="switchTab('url', this)">🌐 Webpage</button>
+      <button class="tab" onclick="switchTab('youtube', this)">▶ YouTube</button>
+      <button class="tab" onclick="switchTab('video', this)">🎬 Video</button>
+      <button class="tab" onclick="switchTab('audio', this)">🎵 Audio</button>
+      <button class="tab" onclick="switchTab('image', this)">🖼 Image</button>
+      <button class="tab" onclick="switchTab('pdf', this)">📄 PDF, Image & More Files</button>
+      <button class="tab" onclick="switchTab('text', this)">📝 Long Text</button>
     </div>
 
     <!-- Input Section -->
@@ -446,9 +588,9 @@
         </div>
       </div>
 
-      <input type="url" id="urlInput" placeholder="Paste article or webpage URL" style="display: block;">
-      <input type="file" id="fileInput" placeholder="Select file" style="display: none;">
-      <textarea id="textInput" placeholder="Paste your long text here..." style="display: none; min-height: 200px;"></textarea>
+      <input type="url" id="urlInput" placeholder="Paste article or webpage URL">
+      <input type="file" id="fileInput" placeholder="Select file" accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg,.webp,.mp3,.wav,.m4a,.aac,.ogg,.webm,.mp4,.mov,.mkv,.avi,.mpeg,.mpg,.wmv,.flv,.m4v,.3gp,.3g2,.ts,.mts,.m2ts">
+      <textarea id="textInput" placeholder="Paste your long text here..."></textarea>
 
       <!-- Controls -->
       <div class="controls">
@@ -482,6 +624,12 @@
           </select>
         </div>
       </div>
+
+      <div class="stage-badges" id="stageBadges">
+        <div id="badgeUpload" class="badge pending">Upload: waiting</div>
+        <div id="badgeExtraction" class="badge pending">Extraction: waiting</div>
+        <div id="badgeSummary" class="badge pending">Summary: waiting</div>
+      </div>
     </div>
 
     <!-- More Summary Tools -->
@@ -509,7 +657,7 @@
 
     <!-- Button Group -->
     <div class="button-group">
-      <select id="outputLanguage">
+      <select id="outputLanguage" aria-label="Output language">
         <option value="en">English</option>
         <option value="es">Spanish</option>
         <option value="fr">French</option>
@@ -534,93 +682,170 @@
     <div class="result-section" id="resultSection">
       <h3>Summary:</h3>
       <p class="result-text" id="result"></p>
+
+      <div class="export-section" id="exportSection">
+        <div class="export-actions">
+          <button class="export-btn" onclick="copySummary()">Copy</button>
+          <button class="export-btn" onclick="exportTxt()">Export TXT</button>
+          <button class="export-btn" onclick="exportPdf()">Export PDF</button>
+          <button class="export-btn" onclick="shareSummary()">Share Link</button>
+        </div>
+        <input id="shareLink" class="share-link" type="text" readonly value="Share link will appear here after summary generation">
+      </div>
+    </div>
+
+    <div class="analytics">
+      <h3>Usage analytics</h3>
+      <div class="analytics-grid">
+        <div class="analytics-card">
+          <div class="analytics-label">Total requests</div>
+          <div class="analytics-value" id="analyticsTotal">0</div>
+        </div>
+        <div class="analytics-card">
+          <div class="analytics-label">Average response time</div>
+          <div class="analytics-value" id="analyticsAvg">0 ms</div>
+        </div>
+        <div class="analytics-card">
+          <div class="analytics-label">Most used mode</div>
+          <div class="analytics-value" id="analyticsTopMode">N/A</div>
+        </div>
+      </div>
+      <div class="analytics-list" id="analyticsModes"></div>
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <script>
+    const API_BASE = 'https://article-summarizer-ai-production.up.railway.app/api';
     let currentTab = 'url';
+    let latestSummary = '';
 
-    function switchTab(tab) {
+    const analytics = loadAnalytics();
+
+    const modeConfig = {
+      url: {
+        icon: '🌐',
+        title: 'Paste a webpage URL.',
+        desc: 'Extract main article content and summarize in seconds.\nSupported file formats: HTTP / HTTPS links',
+        input: 'url',
+        endpoint: '/summarize-url',
+        makeRequest: () => ({
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            url: document.getElementById('urlInput').value,
+            language: document.getElementById('outputLanguage').value
+          })
+        })
+      },
+      youtube: {
+        icon: '▶',
+        title: 'Paste a YouTube URL.',
+        desc: 'Send YouTube URL as webpage source.\nSupported input: YouTube links',
+        input: 'url',
+        endpoint: '/summarize-url',
+        makeRequest: () => ({
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            url: document.getElementById('urlInput').value,
+            language: document.getElementById('outputLanguage').value
+          })
+        })
+      },
+      video: {
+        icon: '🎬',
+        title: 'Upload a video.',
+        desc: 'Upload video files and summarize content.\nSupported file formats: MP4, WebM, MOV, AVI',
+        input: 'file',
+        endpoint: '/summarize-video',
+        fieldName: 'video',
+        accept: '.mp4,.webm,.mov,.mkv,.mpeg,.mpg,.avi,.wmv,.flv,.m4v,.3gp,.3g2,.ts,.mts,.m2ts'
+      },
+      audio: {
+        icon: '🎵',
+        title: 'Upload an audio file.',
+        desc: 'Transcribe and summarize audio content.\nSupported file formats: MP3, WAV, M4A, AAC, OGG, WEBM',
+        input: 'file',
+        endpoint: '/summarize-audio',
+        fieldName: 'audio',
+        accept: '.mp3,.wav,.m4a,.aac,.ogg,.webm'
+      },
+      image: {
+        icon: '🖼',
+        title: 'Upload an image.',
+        desc: 'Extract text and summarize from images.\nSupported file formats: JPG, PNG, GIF, WebP',
+        input: 'file',
+        endpoint: '/summarize-image',
+        fieldName: 'image',
+        accept: '.png,.jpg,.jpeg,.webp,.gif'
+      },
+      pdf: {
+        icon: '📄',
+        title: 'Upload a file.',
+        desc: 'Summarize documents and images.\nSupported file formats: PDF, DOCX, TXT, JPG, PNG',
+        input: 'file',
+        endpoint: '/summarize-document',
+        fieldName: 'document',
+        accept: '.pdf,.doc,.docx,.txt,.png,.jpg,.jpeg,.webp'
+      },
+      text: {
+        icon: '📝',
+        title: 'Paste your long text.',
+        desc: 'Summarize lengthy articles and documents.\nSupported: Plain text, up to 100K characters',
+        input: 'text',
+        endpoint: '/summarize-text',
+        makeRequest: () => ({
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            text: document.getElementById('textInput').value,
+            language: document.getElementById('outputLanguage').value
+          })
+        })
+      }
+    };
+
+    function switchTab(tab, element) {
       currentTab = tab;
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      event.target.classList.add('active');
+      element.classList.add('active');
 
-      // Update input fields
-      document.getElementById('urlInput').style.display = tab === 'url' ? 'block' : 'none';
-      document.getElementById('fileInput').style.display = (tab === 'pdf' || tab === 'image') ? 'block' : 'none';
-      document.getElementById('textInput').style.display = tab === 'text' ? 'block' : 'none';
+      const mode = modeConfig[tab];
+      const urlInput = document.getElementById('urlInput');
+      const fileInput = document.getElementById('fileInput');
+      const textInput = document.getElementById('textInput');
 
-      // Update labels
-      const modes = {
-        url: { icon: '🌐', title: 'Paste a webpage URL.', desc: 'Extract main article content and summarize in seconds.\nSupported file formats: HTTP / HTTPS links' },
-        youtube: { icon: '▶', title: 'Paste a YouTube URL.', desc: 'Transcribe and summarize YouTube videos instantly.\nSupported file formats: YouTube links' },
-        video: { icon: '🎬', title: 'Upload a video.', desc: 'Upload video files and summarize content.\nSupported file formats: MP4, WebM, MOV, AVI' },
-        audio: { icon: '🎵', title: 'Upload an audio file.', desc: 'Transcribe and summarize audio content.\nSupported file formats: MP3, WAV, M4A, FLAC' },
-        image: { icon: '🖼', title: 'Upload an image.', desc: 'Extract text and summarize from images.\nSupported file formats: JPG, PNG, GIF, WebP' },
-        pdf: { icon: '📄', title: 'Upload a file.', desc: 'Summarize documents and images.\nSupported file formats: PDF, DOCX, TXT, JPG, PNG' },
-        text: { icon: '📝', title: 'Paste your long text.', desc: 'Summarize lengthy articles and documents.\nSupported: Plain text, up to 100K characters' }
-      };
+      urlInput.style.display = mode.input === 'url' ? 'block' : 'none';
+      fileInput.style.display = mode.input === 'file' ? 'block' : 'none';
+      textInput.style.display = mode.input === 'text' ? 'block' : 'none';
+      fileInput.value = '';
+      fileInput.accept = mode.accept || '';
 
-      const mode = modes[tab];
       document.getElementById('modeIcon').textContent = mode.icon;
       document.getElementById('modeTitle').textContent = mode.title;
       document.getElementById('modeDesc').textContent = mode.desc;
+
+      resetStageBadges();
     }
 
     function toggleSwitch(element) {
       element.classList.toggle('active');
     }
 
-    async function generateSummary() {
-      const urlInput = document.getElementById('urlInput').value;
-      const textInput = document.getElementById('textInput').value;
-      const loading = document.getElementById('loading');
-      const error = document.getElementById('error');
-      const resultSection = document.getElementById('resultSection');
+    function setBadge(stage, state, message) {
+      const node = document.getElementById(`badge${stage}`);
+      node.className = `badge ${state}`;
+      node.textContent = `${stage}: ${message}`;
+    }
 
-      error.classList.remove('show');
+    function resetStageBadges() {
+      setBadge('Upload', 'pending', 'waiting');
+      setBadge('Extraction', 'pending', 'waiting');
+      setBadge('Summary', 'pending', 'waiting');
 
-      if (currentTab === 'url' && !urlInput) {
-        showError('Please enter a URL');
-        return;
-      }
-
-      if (currentTab === 'text' && !textInput) {
-        showError('Please enter text to summarize');
-        return;
-      }
-
-      loading.classList.add('show');
-      resultSection.classList.remove('show');
-
-      try {
-        const body = {};
-        if (currentTab === 'url') {
-          body.url = urlInput;
-        } else if (currentTab === 'text') {
-          body.text = textInput;
-        }
-
-        const response = await fetch('https://article-summarizer-ai-production.up.railway.app/api/summarize', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(body)
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          document.getElementById('result').textContent = data.summary || 'No summary available';
-          resultSection.classList.add('show');
-        } else {
-          showError(data.error || 'Failed to generate summary');
-        }
-      } catch (err) {
-        showError('Error: ' + err.message);
-      } finally {
-        loading.classList.remove('show');
+      if (modeConfig[currentTab].input !== 'file') {
+        setBadge('Upload', 'success', 'not required');
       }
     }
 
@@ -630,11 +855,254 @@
       error.classList.add('show');
     }
 
+    function buildFileRequest(mode) {
+      const fileInput = document.getElementById('fileInput');
+      const file = fileInput.files[0];
+
+      if (!file) {
+        throw new Error('Please select a file before generating summary.');
+      }
+
+      const form = new FormData();
+      form.append(mode.fieldName, file);
+      form.append('language', document.getElementById('outputLanguage').value);
+
+      return {
+        method: 'POST',
+        body: form
+      };
+    }
+
+    async function generateSummary() {
+      const loading = document.getElementById('loading');
+      const error = document.getElementById('error');
+      const resultSection = document.getElementById('resultSection');
+      const exportSection = document.getElementById('exportSection');
+      const selectedMode = modeConfig[currentTab];
+
+      error.classList.remove('show');
+      resultSection.classList.remove('show');
+      exportSection.classList.remove('show');
+      resetStageBadges();
+
+      try {
+        if (selectedMode.input === 'url' && !document.getElementById('urlInput').value.trim()) {
+          showError('Please enter a URL');
+          return;
+        }
+
+        if (selectedMode.input === 'text' && !document.getElementById('textInput').value.trim()) {
+          showError('Please enter text to summarize');
+          return;
+        }
+
+        loading.classList.add('show');
+        const start = performance.now();
+
+        let requestConfig;
+        if (selectedMode.input === 'file') {
+          setBadge('Upload', 'inprogress', 'uploading');
+          requestConfig = buildFileRequest(selectedMode);
+          setBadge('Upload', 'success', 'uploaded');
+        } else {
+          requestConfig = selectedMode.makeRequest();
+        }
+
+        setBadge('Extraction', 'inprogress', 'processing');
+        const response = await fetch(`${API_BASE}${selectedMode.endpoint}`, requestConfig);
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          const responseError = data.error || 'Request failed';
+          if (selectedMode.input === 'file') {
+            setBadge('Extraction', 'error', 'failed');
+          } else {
+            setBadge('Extraction', 'error', 'failed');
+          }
+          setBadge('Summary', 'error', 'not generated');
+          throw new Error(responseError);
+        }
+
+        setBadge('Extraction', 'success', 'complete');
+        setBadge('Summary', 'inprogress', 'generating');
+
+        latestSummary = String(data.summary || '').trim();
+        if (!latestSummary) {
+          setBadge('Summary', 'error', 'empty response');
+          throw new Error('No summary available in response');
+        }
+
+        document.getElementById('result').textContent = latestSummary;
+        resultSection.classList.add('show');
+        exportSection.classList.add('show');
+        setBadge('Summary', 'success', 'ready');
+
+        const elapsed = performance.now() - start;
+        updateAnalytics(currentTab, elapsed);
+        updateShareLink();
+      } catch (err) {
+        if (modeConfig[currentTab].input === 'file') {
+          const uploadBadge = document.getElementById('badgeUpload');
+          if (uploadBadge.textContent.includes('waiting')) {
+            setBadge('Upload', 'error', 'failed');
+          }
+        }
+        showError('Error: ' + err.message);
+      } finally {
+        loading.classList.remove('show');
+      }
+    }
+
+    function updateShareLink() {
+      const payload = {
+        mode: currentTab,
+        summary: latestSummary,
+        ts: new Date().toISOString()
+      };
+      const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+      const link = `${location.origin}${location.pathname}#summary=${encoded}`;
+      document.getElementById('shareLink').value = link;
+    }
+
+    function copySummary() {
+      if (!latestSummary) {
+        showError('No summary to copy yet.');
+        return;
+      }
+      navigator.clipboard.writeText(latestSummary)
+        .then(() => {
+          document.getElementById('syncStatus').textContent = 'Summary copied to clipboard';
+        })
+        .catch(() => showError('Clipboard copy failed.'));
+    }
+
+    function exportTxt() {
+      if (!latestSummary) {
+        showError('No summary to export yet.');
+        return;
+      }
+
+      const blob = new Blob([latestSummary], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `summary-${currentTab}-${Date.now()}.txt`;
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function exportPdf() {
+      if (!latestSummary) {
+        showError('No summary to export yet.');
+        return;
+      }
+
+      if (!window.jspdf || !window.jspdf.jsPDF) {
+        showError('PDF library could not be loaded.');
+        return;
+      }
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const lines = doc.splitTextToSize(latestSummary, 180);
+      doc.setFontSize(12);
+      doc.text(`Article Summary (${currentTab})`, 14, 16);
+      doc.setFontSize(10);
+      doc.text(lines, 14, 26);
+      doc.save(`summary-${currentTab}-${Date.now()}.pdf`);
+    }
+
+    function shareSummary() {
+      const link = document.getElementById('shareLink').value;
+      if (!latestSummary || !link) {
+        showError('Generate a summary first to share.');
+        return;
+      }
+
+      if (navigator.share) {
+        navigator.share({
+          title: 'Article Summary',
+          text: latestSummary.slice(0, 180),
+          url: link
+        }).catch(() => {});
+      } else {
+        navigator.clipboard.writeText(link)
+          .then(() => {
+            document.getElementById('syncStatus').textContent = 'Share link copied';
+          })
+          .catch(() => showError('Unable to copy share link.'));
+      }
+    }
+
+    function loadAnalytics() {
+      try {
+        const raw = localStorage.getItem('summaryAnalyticsV1');
+        if (raw) {
+          return JSON.parse(raw);
+        }
+      } catch (_e) {
+      }
+
+      return {
+        total: 0,
+        totalMs: 0,
+        modes: {
+          url: 0,
+          youtube: 0,
+          video: 0,
+          audio: 0,
+          image: 0,
+          pdf: 0,
+          text: 0
+        }
+      };
+    }
+
+    function saveAnalytics() {
+      localStorage.setItem('summaryAnalyticsV1', JSON.stringify(analytics));
+    }
+
+    function updateAnalytics(mode, elapsedMs) {
+      analytics.total += 1;
+      analytics.totalMs += elapsedMs;
+      analytics.modes[mode] = (analytics.modes[mode] || 0) + 1;
+      saveAnalytics();
+      renderAnalytics();
+    }
+
+    function renderAnalytics() {
+      document.getElementById('analyticsTotal').textContent = String(analytics.total);
+
+      const avg = analytics.total > 0 ? Math.round(analytics.totalMs / analytics.total) : 0;
+      document.getElementById('analyticsAvg').textContent = `${avg} ms`;
+
+      const entries = Object.entries(analytics.modes);
+      let topMode = 'N/A';
+      let topCount = 0;
+
+      entries.forEach(([mode, count]) => {
+        if (count > topCount) {
+          topMode = mode;
+          topCount = count;
+        }
+      });
+
+      document.getElementById('analyticsTopMode').textContent = topCount > 0 ? `${topMode} (${topCount})` : 'N/A';
+
+      const modeStats = entries
+        .map(([mode, count]) => `<div><strong>${mode}</strong>: ${count}</div>`)
+        .join('');
+      document.getElementById('analyticsModes').innerHTML = modeStats;
+    }
+
     // Live sync simulation
     setInterval(() => {
       const status = Math.random() > 0.1 ? 'Connected' : 'Reconnecting...';
       document.getElementById('syncStatus').textContent = 'Live sync: ' + status;
     }, 5000);
+
+    resetStageBadges();
+    renderAnalytics();
   </script>
 </body>
 </html>
