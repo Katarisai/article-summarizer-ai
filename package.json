@@ -1,0 +1,21 @@
+{
+  "name": "article-summarizer-ai-launcher",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "node scripts/dev.js",
+    "start": "node scripts/dev.js",
+    "dev:server": "cd article-summarizer-ai\\server && npm run dev",
+    "dev:client": "cd article-summarizer-ai\\client && npm start",
+    "install-all": "cd article-summarizer-ai && npm run install-all"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.27",
+    "postcss": "^8.5.8",
+    "tailwindcss": "^3.4.17"
+  },
+  "dependencies": {
+    "multer": "^2.1.1",
+    "tesseract.js": "^7.0.0"
+  }
+}

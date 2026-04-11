@@ -1,0 +1,70 @@
+{
+  "info": {
+    "_postman_id": "article-summarizer-ai",
+    "name": "Article Summarizer AI",
+    "description": "API collection for Article Summarizer AI application",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Summarize Text",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"text\": \"Artificial intelligence (AI) is intelligence demonstrated by machines, in contrast to the natural intelligence displayed by animals and humans. Leading AI textbooks define the field as the study of intelligent agents: systems that perceive their environment and take actions that maximize their chances of achieving defined goals. Some popular accounts use the term 'artificial intelligence' to describe machines that mimic 'cognitive' functions that humans associate with minds, such as 'learning' and 'problem solving'. This definition is relevant when describing applications of AI.\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/summarize",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "summarize"
+          ]
+        },
+        "description": "Send text to be summarized by OpenAI GPT-4 model"
+      },
+      "response": []
+    },
+    {
+      "name": "Summarize Article Example",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"text\": \"The rise of remote work has fundamentally changed the way companies operate and employees work. During the COVID-19 pandemic, many organizations were forced to transition to remote work almost overnight. What started as an emergency measure has now become a permanent fixture in many industries. Remote work offers numerous benefits including increased flexibility, reduced commute times, and improved work-life balance. However, it also presents challenges such as communication barriers, reduced team cohesion, and burnout from being always connected. Many companies are now implementing hybrid work models that combine the best of both remote and in-office work.\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/summarize",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "summarize"
+          ]
+        },
+        "description": "Example request with article about remote work"
+      },
+      "response": []
+    }
+  ]
+}
