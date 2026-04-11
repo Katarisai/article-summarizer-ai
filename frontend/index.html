@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Article Summarizer</title>
+</head>
+<body>
+  <h1>Article Summarizer</h1>
+
+  <textarea id="text" placeholder="Paste article"></textarea>
+  <br><br>
+
+  <button onclick="summarize()">Generate Summary</button>
+
+  <h3>Summary:</h3>
+  <p id="result"></p>
+
+  <script>
+    async function summarize() {
+      const text = document.getElementById("text").value;
+
+      const response = await fetch("YOUR_BACKEND_URL/summarize", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ text })
+      });
+
+      const data = await response.json();
+      document.getElementById("result").innerText = data.summary;
+    }
+  </script>
+
+</body>
+</html>
