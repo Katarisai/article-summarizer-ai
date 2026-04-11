@@ -5,12 +5,14 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-app.use(express.static(__dirname));
+// serve static files
+app.use(express.static(path.join(__dirname)));
 
-app.get("/", (req, res) => {
+// fallback route (Express 5 compatible)
+app.get(/.*/, (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Frontend running on port ${PORT}`);
+  console.log("Frontend running on port", PORT);
 });
