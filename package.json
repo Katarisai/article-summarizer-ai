@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "node scripts/dev.js",
-    "start": "node scripts/dev.js",
+    "start": "node server.js",
+    "postinstall": "cd article-summarizer-ai/server && npm install",
     "dev:server": "cd article-summarizer-ai\\server && npm run dev",
     "dev:client": "cd article-summarizer-ai\\client && npm start",
     "install-all": "cd article-summarizer-ai && npm run install-all"

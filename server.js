@@ -1,0 +1,1 @@
+require("./article-summarizer-ai/server/server");
