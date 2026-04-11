@@ -157,6 +157,32 @@ From project root:
 - `npm run dev:client` - start frontend dev server
 - `npm start` - start backend in production mode
 
+## Railway Deployment Fix
+
+If Railway fails to start the service, make sure production uses the root server entry file.
+
+1. In Railway, open your project settings.
+2. Go to `Settings -> Start Command`.
+3. Set start command to:
+
+```bash
+node server.js
+```
+
+4. Save and redeploy.
+
+Important:
+
+- Keep root `package.json` production start script as:
+
+```json
+"scripts": {
+  "start": "node server.js"
+}
+```
+
+- Do not use development scripts for production startup, such as `scripts/dev.js`, `nodemon`, or concurrent client/server dev commands.
+
 ## License
 
 MIT
