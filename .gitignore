@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+article-summarizer-ai/node_modules/
+article-summarizer-ai/client/node_modules/
+article-summarizer-ai/server/node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment
+.env
+.env.*
+article-summarizer-ai/.env
+frontend/.env
+
+# Build outputs
+frontend/dist/
+frontend/build/
+article-summarizer-ai/client/build/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
