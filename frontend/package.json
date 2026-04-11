@@ -2,9 +2,9 @@
   "name": "frontend",
   "version": "1.0.0",
   "scripts": {
-    "start": "serve ."
+    "start": "serve . -l $PORT"
   },
   "dependencies": {
-    "serve": "^14.2.0"
+    "serve": "^14.2.6"
   }
 }
