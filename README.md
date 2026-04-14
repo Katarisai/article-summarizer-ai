@@ -94,6 +94,26 @@ npm run dev:client
 Frontend: http://localhost:3000
 Backend: http://localhost:5000
 
+## Railway Deployment
+
+This project is configured for Railway with [railway.json](railway.json).
+
+### Deploy steps
+
+1. Push this repository to GitHub.
+2. In Railway, create a New Project and choose Deploy from GitHub Repo.
+3. Select this repository.
+4. Railway will run install automatically and start the app with `npm start`.
+5. Set required environment variables in Railway Project Variables:
+  - `MONGO_URI`
+  - `OPENAI_API_KEY`
+  - Optional: `FFMPEG_PATH`, `FFPROBE_PATH`
+
+### Health check
+
+- Health endpoint: `/api/health`
+- Railway uses this endpoint for deployment health status.
+
 ## API Endpoints
 
 Base route is mounted at both `/api` and `/api/summarize` for compatibility.

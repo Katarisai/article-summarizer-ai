@@ -1,1 +1,0 @@
-"use strict";(globalThis.webpackChunkarticle_summarizer_client=globalThis.webpackChunkarticle_summarizer_client||[]).push([[631],{1631(e,a,r){r.d(a,{createTreemapServices:()=>i.d});var i=r(8500);r(7391)}}]);

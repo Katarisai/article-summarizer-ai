@@ -1,1 +1,0 @@
-"use strict";(globalThis.webpackChunkarticle_summarizer_client=globalThis.webpackChunkarticle_summarizer_client||[]).push([[25],{2025(e,a,i){i.d(a,{createInfoServices:()=>r.v});var r=i(215);i(7391)}}]);

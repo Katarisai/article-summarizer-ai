@@ -1,1 +1,1 @@
-require("./article-summarizer-ai/server/server");
+require("./backend/server");

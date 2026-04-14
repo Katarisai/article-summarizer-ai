@@ -5,10 +5,10 @@
   "scripts": {
     "dev": "node scripts/dev.js",
     "start": "node server.js",
-    "postinstall": "cd article-summarizer-ai/server && npm install",
-    "dev:server": "cd article-summarizer-ai\\server && npm run dev",
-    "dev:client": "cd article-summarizer-ai\\client && npm start",
-    "install-all": "cd article-summarizer-ai && npm run install-all"
+    "postinstall": "cd backend && npm install && cd ../frontend && npm install",
+    "dev:server": "cd backend && npm run dev",
+    "dev:client": "cd frontend && npm start",
+    "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.27",

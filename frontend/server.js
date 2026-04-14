@@ -12,5 +12,7 @@ app.get(/.*/, (req, res) => {
 });
 
 app.listen(PORT, "0.0.0.0", () => {
-  console.log("Server running on port", PORT);
+  console.log("Frontend server is running.");
+  console.log(`Local:   http://localhost:${PORT}`);
+  console.log(`Network: http://127.0.0.1:${PORT}`);
 });

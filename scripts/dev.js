@@ -2,9 +2,8 @@ const { spawn } = require("child_process");
 const net = require("net");
 const path = require("path");
 
-const appRoot = path.resolve(__dirname, "..", "article-summarizer-ai");
-const serverDir = path.join(appRoot, "server");
-const clientDir = path.join(appRoot, "client");
+const serverDir = path.resolve(__dirname, "..", "backend");
+const clientDir = path.resolve(__dirname, "..", "frontend");
 const npmCommand = "npm";
 
 const isPortOpen = (port) =>
